@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Account Balance - SecureBank{% endblock %}
+
+{% block content %}
+    <h2>💳 Account Balance</h2>
+    
+    <div class="balance-card">
+        <div class="balance-label">💰 Your Current Balance</div>
+        <div class="balance-amount">₹{{ profile.account_balance }}</div>
+        <small style="color: #666;">Account: {{ profile.full_name }}</small>
+    </div>
+    
+    {% if recent_transactions %}
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #424242;">📋 Recent Transactions</h3>
+        <div class="transaction-list">
+            {% for transaction in recent_transactions %}
+                <div class="transaction-item">
+                    <div>
+                        <div class="transaction-type">
+                            {% if transaction.transaction_type == 'deposit' %}
+                                💰 Deposit
+                            {% else %}
+                                💸 Withdrawal
+                            {% endif %}
+                        </div>
+                        <small style="color: #666;">{{ transaction.transaction_date|date:"M d, Y H:i" }}</small>
+                        {% if transaction.description %}
+                            <br><small style="color: #888;">{{ transaction.description }}</small>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <div class="transaction-amount {% if transaction.transaction_type == 'deposit' %}deposit-amount{% else %}withdraw-amount{% endif %}">
+                            {% if transaction.transaction_type == 'deposit' %}+{% else %}-{% endif %}₹{{ transaction.amount }}
+                        </div>
+                        <small style="color: #666;">Balance: ₹{{ transaction.balance_after }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; color: #666; margin-top: 2rem; padding: 2rem; background: #f9f9f9; border-radius: 10px;">
+            <h3>📝 No Transactions Yet</h3>
+            <p>Start by making your first deposit!</p>
+            <a href="{% url 'deposit_money' %}" class="btn" style="margin-top: 1rem;">💰 Make First Deposit</a>
+        </div>
+    {% endif %}
+    
+    <div class="back-section">
+        <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Deposit Money - SecureBank{% endblock %}
+
+{% block content %}
+    <h2>💰 Deposit Money</h2>
+    
+    <div style="background: #e8f5e8; padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem; border-left: 4px solid #4caf50;">
+        <strong>Current Balance: ₹{{ profile.account_balance }}</strong>
+    </div>
+    
+    <form method="post" id="depositForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="total_amount">💵 Total Amount (₹):</label>
+            <input type="number" id="total_amount" name="total_amount" step="0.01" min="0.01" required placeholder="Enter total deposit amount">
+        </div>
+        
+        <h3 style="margin: 1.5rem 0 1rem 0; color: #424242;">💵 Cash Note Breakdown:</h3>
+        
+        <div class="form-group">
+            <label for="notes_500">Number of ₹500 notes:</label>
+            <input type="number" id="notes_500" name="notes_500" min="0" value="0" required onchange="calculateTotal()">
+        </div>
+        
+        <div class="form-group">
+            <label for="notes_200">Number of ₹200 notes:</label>
+            <input type="number" id="notes_200" name="notes_200" min="0" value="0" required onchange="calculateTotal()">
+        </div>
+        
+        <div class="form-group">
+            <label for="notes_100">Number of ₹100 notes:</label>
+            <input type="number" id="notes_100" name="notes_100" min="0" value="0" required onchange="calculateTotal()">
+        </div>
+        
+        <div class="calculated-display">
+            <strong>🧮 Calculated Amount: ₹<span id="calculatedAmount">0</span></strong>
+            <br><small>This amount should match your total amount above</small>
+        </div>
+        
+        <div style="text-align: center;">
+            <button type="submit" class="btn">💰 Deposit Money</button>
+            <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">← Back</a>
+        </div>
+    </form>
+    
+    <script>
+        function calculateTotal() {
+            const notes500 = parseInt(document.getElementById('notes_500').value) || 0;
+            const notes200 = parseInt(document.getElementById('notes_200').value) || 0;
+            const notes100 = parseInt(document.getElementById('notes_100').value) || 0;
+            
+            const total = (notes500 * 500) + (notes200 * 200) + (notes100 * 100);
+            document.getElementById('calculatedAmount').textContent = total;
+            
+            // Auto-fill the total amount field
+            document.getElementById('total_amount').value = total;
+        }
+        
+        // Calculate on page load
+        calculateTotal();
+        
+        // Form validation
+        document.getElementById('depositForm').addEventListener('submit', function(e) {
+            const totalAmount = parseFloat(document.getElementById('total_amount').value);
+            const calculatedAmount = parseFloat(document.getElementById('calculatedAmount').textContent);
+            
+            if (totalAmount !== calculatedAmount) {
+                e.preventDefault();
+                alert('⚠️ Total amount must match the calculated amount from notes!');
+            }
+            
+            if (totalAmount <= 0) {
+                e.preventDefault();
+                alert('⚠️ Please enter a valid amount greater than 0!');
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to SecureBank{% endblock %}
+
+{% block content %}
+    <div style="text-align: center;">
+        <h1>🏦 SecureBank</h1>
+        <p style="font-size: 20px; color: #546e7a; margin-bottom: 2.5rem; line-height: 1.6;">
+            Your trusted banking partner for secure and convenient financial services.
+            <br>Experience modern banking with complete security and ease.
+        </p>
+        
+        <div style="background: linear-gradient(135deg, #e8f5e8, #c8e6c9); padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+            <h3 style="color: #2e7d32; margin-bottom: 1rem;">🔒 Why Choose SecureBank?</h3>
+            <ul style="text-align: left; color: #388e3c; line-height: 1.8; list-style: none;">
+                <li>✅ Secure transactions with advanced encryption</li>
+                <li>✅ 24/7 online banking access</li>
+                <li>✅ Real-time balance updates</li>
+                <li>✅ Complete transaction history</li>
+                <li>✅ User-friendly interface</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 2.5rem;">
+            <a href="{% url 'auth_page' %}" class="btn btn-primary" style="font-size: 18px; padding: 16px 32px;">
+                🚀 Start Banking Now
+            </a>
+        </div>
+    </div>
+{% endblock %}

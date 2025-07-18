@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - SecureBank{% endblock %}
+
+{% block content %}
+    <h2>👋 Welcome, {{ profile.full_name }}!</h2>
+    
+    <div class="balance-card">
+        <div class="balance-label">💰 Current Account Balance</div>
+        <div class="balance-amount">₹{{ profile.account_balance }}</div>
+        <small style="color: #666;">Last updated: {{ profile.last_updated|date:"M d, Y H:i" }}</small>
+    </div>
+    
+    <div class="dashboard-grid">
+        <a href="{% url 'balance_view' %}" class="btn btn-primary">
+            📊 View Balance & History
+        </a>
+        <a href="{% url 'deposit_money' %}" class="btn">
+            💰 Deposit Money
+        </a>
+        <a href="{% url 'withdraw_money' %}" class="btn">
+            💸 Withdraw Money
+        </a>
+        <a href="{% url 'user_logout' %}" class="btn btn-danger">
+            🚪 Logout
+        </a>
+    </div>
+    
+    <div style="background: #f5f5f5; padding: 1.5rem; border-radius: 10px; margin-top: 2rem; text-align: center;">
+        <h4 style="color: #424242; margin-bottom: 1rem;">📱 Quick Stats</h4>
+        <p style="color: #666;">Account created: {{ profile.account_created|date:"M d, Y" }}</p>
+        <p style="color: #666;">Account holder: {{ profile.full_name }}</p>
+        <p style="color: #666;">Contact: {{ profile.phone_number }}</p>
+    </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Withdraw Money - SecureBank{% endblock %}
+
+{% block content %}
+    <h2>💸 Withdraw Money</h2>
+    
+    <div class="balance-card">
+        <div class="balance-label">💰 Available Balance</div>
+        <div class="balance-amount">₹{{ profile.account_balance }}</div>
+    </div>
+    
+    <form method="post" id="withdrawForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="withdraw_amount">💸 Withdrawal Amount (₹):</label>
+            <input type="number" id="withdraw_amount" name="withdraw_amount" step="0.01" min="0.01" max="{{ profile.account_balance }}" required placeholder="Enter amount to withdraw">
+        </div>
+        
+        <div class="warning-box">
+            <strong>⚠️ Important:</strong> You can withdraw up to ₹{{ profile.account_balance }} from your account.
+            <br>Minimum withdrawal amount is ₹0.01
+        </div>
+        
+        <div style="text-align: center;">
+            <button type="submit" class="btn btn-danger">💸 Withdraw Money</button>
+            <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">← Back</a>
+        </div>
+    </form>
+    
+    <script>
+        // Form validation
+        document.getElementById('withdrawForm').addEventListener('submit', function(e) {
+            const amount = parseFloat(document.getElementById('withdraw_amount').value);
+            const balance = {{ profile.account_balance }};
+            
+            if (amount > balance) {
+                e.preventDefault();
+                alert('⚠️ Withdrawal amount cannot exceed available balance!');
+            }
+            
+            if (amount <= 0) {
+                e.preventDefault();
+                alert('⚠️ Please enter a valid amount greater than 0!');
+            }
+            
+            // Confirmation dialog
+            if (!confirm(`Are you sure you want to withdraw ₹${amount}?`)) {
+                e.preventDefault();
+            }
+        });
+    </script>
+{% endblock %}
